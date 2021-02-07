@@ -26,7 +26,7 @@ SECRET_KEY = 'yn#g7a*h=hxxgdnz9s(+-5fnl)54&mysexf1egwi_go72@ivi='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'my-tuber.herokuapp.com']
 
 LOGIN_REDIRECT_URL = 'dashboard'
 
