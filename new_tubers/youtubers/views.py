@@ -1,0 +1,89 @@
+from django.shortcuts import get_object_or_404, render
+from .models import Youtuber
+from tuber_webpages.models import ContactInfo
+
+
+def youtubers(request):
+    tubers = Youtuber.objects.order_by('-created_date')
+    contact_info = ContactInfo.objects.all()
+    city_search = Youtuber.objects.values_list('city', flat=True).distinct()
+    camera_type_search = Youtuber.objects.values_list('camera_type', flat=True).distinct()
+    category_search = Youtuber.objects.values_list('category', flat=True).distinct()
+
+    if 'keyword' in request.GET:
+        keyword = request.GET['keyword']
+        if keyword:
+            tubers = tubers.filter(description__icontains=keyword)
+
+    if 'city' in request.GET:
+        city = request.GET['city']
+        if city:
+            tubers = tubers.filter(city__iexact=city)
+
+    if 'camera' in request.GET:
+        camera_type = request.GET['camera']
+        if camera_type:
+            tubers = tubers.filter(camera_type__iexact=camera_type)
+
+    if 'category' in request.GET:
+        category = request.GET['category']
+        if category:
+            tubers = tubers.filter(category__iexact=category)
+
+    data = {
+        'tubers': tubers,
+        'contact_info': contact_info,
+        'city_search': city_search,
+        'camera_type_search': camera_type_search,
+        'category_search': category_search,
+    }
+    return render(request, 'youtubers/youtubers.html', data)
+
+
+def youtubers_detail(request, id):
+    tuber = get_object_or_404(Youtuber, pk=id)
+    contact_info = ContactInfo.objects.all()
+    data = {
+        'tuber': tuber,
+        'contact_info': contact_info
+    }
+    return render(request, 'youtubers/youtubers_detail.html', data)
+
+
+def search(request):
+    tubers = Youtuber.objects.order_by('-created_date')
+    city_search = Youtuber.objects.values_list('city', flat=True).distinct()
+    camera_type_search = Youtuber.objects.values_list('camera_type', flat=True).distinct()
+    category_search = Youtuber.objects.values_list('category', flat=True).distinct()
+
+    contact_info = ContactInfo.objects.all()
+
+    if 'keyword' in request.GET:
+        keyword = request.GET['keyword']
+        if keyword:
+            tubers = tubers.filter(description__icontains=keyword)
+
+    if 'city' in request.GET:
+        city = request.GET['city']
+        if city:
+            tubers = tubers.filter(city__iexact=city)
+
+    if 'camera' in request.GET:
+        camera_type = request.GET['camera']
+        if camera_type:
+            tubers = tubers.filter(camera_type__iexact=camera_type)
+
+    if 'category' in request.GET:
+        category = request.GET['category']
+        if category:
+            tubers = tubers.filter(category__iexact=category)
+
+    data = {
+        'tubers': tubers,
+        'city_search': city_search,
+        'camera_type_search': camera_type_search,
+        'category_search': category_search,
+        'contact_info': contact_info
+    }
+    return render(request, 'youtubers/search.html', data)
+
